@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TODOアプリ ワイヤーフレーム</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .wireframe-box {
+      border: 2px dashed #9ca3af;
+      background-color: #f9fafb;
+    }
+    .screen-container {
+      border: 3px solid #374151;
+      background-color: #ffffff;
+    }
+    .nav-tab {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-tab:hover {
+      background-color: #e5e7eb;
+    }
+    .nav-tab.active {
+      background-color: #3b82f6;
+      color: white;
+    }
+    .screen {
+      display: none;
+    }
+    .screen.active {
+      display: block;
+    }
+  </style>
+</head>
+<body class="bg-gray-200 p-8">
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold text-center mb-2">TODOアプリ ワイヤーフレーム</h1>
+    <p class="text-center text-gray-600 mb-6">タブをクリックして各画面を確認してください</p>
+
+    <!-- Navigation Tabs -->
+    <div class="flex flex-wrap gap-2 mb-6 justify-center">
+      <button class="nav-tab active px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium" data-screen="login">
+        ログイン
+      </button>
+      <button class="nav-tab px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium" data-screen="signup">
+        新規登録
+      </button>
+      <button class="nav-tab px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium" data-screen="reset-password">
+        パスワードリセット
+      </button>
+      <button class="nav-tab px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium" data-screen="todo-list">
+        TODO一覧
+      </button>
+      <button class="nav-tab px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium" data-screen="todo-create">
+        TODO作成
+      </button>
+      <button class="nav-tab px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium" data-screen="todo-detail">
+        TODO詳細
+      </button>
+      <button class="nav-tab px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium" data-screen="todo-edit">
+        TODO編集
+      </button>
+      <button class="nav-tab px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium" data-screen="trash">
+        ゴミ箱
+      </button>
+    </div>
+
+    <!-- Screen Container -->
+    <div class="flex justify-center">
+
+      <!-- SCR-001: ログイン画面 -->
+      <div id="login" class="screen active screen-container rounded-xl shadow-xl w-full max-w-md">
+        <div class="p-8">
+          <div class="text-center mb-8">
+            <div class="wireframe-box w-16 h-16 mx-auto rounded-lg flex items-center justify-center mb-4">
+              <span class="text-gray-500 text-xs">Logo</span>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800">ログイン</h2>
+            <p class="text-gray-500 text-sm mt-1">TODOアプリへようこそ</p>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">メールアドレス</label>
+              <div class="wireframe-box rounded-lg p-3">
+                <span class="text-gray-400 text-sm">example@email.com</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">パスワード</label>
+              <div class="wireframe-box rounded-lg p-3">
+                <span class="text-gray-400 text-sm">••••••••</span>
+              </div>
+            </div>
+
+            <div class="wireframe-box bg-blue-100 border-blue-300 rounded-lg p-3 text-center">
+              <span class="text-blue-600 font-medium">ログイン</span>
+            </div>
+          </div>
+
+          <div class="mt-6 text-center space-y-2">
+            <p class="text-sm">
+              <span class="text-gray-500">アカウントをお持ちでない方は</span>
+              <span class="text-blue-500 underline ml-1">新規登録</span>
+            </p>
+            <p class="text-sm">
+              <span class="text-blue-500 underline">パスワードを忘れた方</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-gray-100 px-4 py-3 rounded-b-xl">
+          <p class="text-xs text-gray-500 text-center">SCR-001: ログイン画面 | /login</p>
+        </div>
+      </div>
+
+      <!-- SCR-002: 新規登録画面 -->
+      <div id="signup" class="screen screen-container rounded-xl shadow-xl w-full max-w-md">
+        <div class="p-8">
+          <div class="text-center mb-8">
+            <div class="wireframe-box w-16 h-16 mx-auto rounded-lg flex items-center justify-center mb-4">
+              <span class="text-gray-500 text-xs">Logo</span>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800">新規登録</h2>
+            <p class="text-gray-500 text-sm mt-1">アカウントを作成してください</p>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">メールアドレス <span class="text-red-500">*</span></label>
+              <div class="wireframe-box rounded-lg p-3">
+                <span class="text-gray-400 text-sm">example@email.com</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">パスワード <span class="text-red-500">*</span></label>
+              <div class="wireframe-box rounded-lg p-3">
+                <span class="text-gray-400 text-sm">8文字以上</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">パスワード（確認） <span class="text-red-500">*</span></label>
+              <div class="wireframe-box rounded-lg p-3">
+                <span class="text-gray-400 text-sm">パスワードを再入力</span>
+              </div>
+            </div>
+
+            <div class="wireframe-box bg-blue-100 border-blue-300 rounded-lg p-3 text-center">
+              <span class="text-blue-600 font-medium">登録する</span>
+            </div>
+          </div>
+
+          <div class="mt-6 text-center">
+            <p class="text-sm">
+              <span class="text-gray-500">すでにアカウントをお持ちの方は</span>
+              <span class="text-blue-500 underline ml-1">ログイン</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-gray-100 px-4 py-3 rounded-b-xl">
+          <p class="text-xs text-gray-500 text-center">SCR-002: 新規登録画面 | /signup</p>
+        </div>
+      </div>
+
+      <!-- SCR-003: パスワードリセット画面 -->
+      <div id="reset-password" class="screen screen-container rounded-xl shadow-xl w-full max-w-md">
+        <div class="p-8">
+          <div class="text-center mb-8">
+            <div class="wireframe-box w-16 h-16 mx-auto rounded-lg flex items-center justify-center mb-4">
+              <span class="text-gray-500 text-xs">🔒</span>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800">パスワードリセット</h2>
+            <p class="text-gray-500 text-sm mt-1">登録済みのメールアドレスを入力してください</p>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">メールアドレス</label>
+              <div class="wireframe-box rounded-lg p-3">
+                <span class="text-gray-400 text-sm">example@email.com</span>
+              </div>
+            </div>
+
+            <div class="wireframe-box bg-blue-100 border-blue-300 rounded-lg p-3 text-center">
+              <span class="text-blue-600 font-medium">リセットリンクを送信</span>
+            </div>
+          </div>
+
+          <div class="mt-6 text-center">
+            <p class="text-sm">
+              <span class="text-blue-500 underline">← ログイン画面に戻る</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-gray-100 px-4 py-3 rounded-b-xl">
+          <p class="text-xs text-gray-500 text-center">SCR-003: パスワードリセット画面 | /reset-password</p>
+        </div>
+      </div>
+
+      <!-- SCR-004: TODO一覧画面 -->
+      <div id="todo-list" class="screen screen-container rounded-xl shadow-xl w-full max-w-2xl">
+        <!-- Header -->
+        <div class="bg-gray-800 text-white px-6 py-4 rounded-t-xl flex justify-between items-center">
+          <h1 class="text-xl font-bold">📝 TODO一覧</h1>
+          <div class="flex items-center gap-4">
+            <div class="wireframe-box border-gray-500 rounded px-3 py-1 text-sm">
+              <span class="text-gray-300">🗑️ ゴミ箱</span>
+            </div>
+            <div class="wireframe-box border-gray-500 rounded px-3 py-1 text-sm">
+              <span class="text-gray-300">ログアウト</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6">
+          <!-- Filter & Search -->
+          <div class="flex flex-wrap gap-4 mb-6">
+            <div class="flex-1 min-w-[200px]">
+              <div class="wireframe-box rounded-lg p-3 flex items-center">
+                <span class="text-gray-400 mr-2">🔍</span>
+                <span class="text-gray-400 text-sm">タイトル・詳細で検索...</span>
+              </div>
+            </div>
+            <div class="w-48">
+              <div class="wireframe-box rounded-lg p-3">
+                <span class="text-gray-500 text-sm">ステータス: すべて ▼</span>
+              </div>
+            </div>
+            <div class="wireframe-box bg-blue-100 border-blue-300 rounded-lg px-4 py-3">
+              <span class="text-blue-600 font-medium">＋ 新規作成</span>
+            </div>
+          </div>
+
+          <!-- TODO List -->
+          <div class="space-y-3">
+            <!-- TODO Item 1 -->
+            <div class="wireframe-box rounded-lg p-4 hover:bg-gray-100 cursor-pointer">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-red-100 text-red-600 text-xs px-2 py-1 rounded">高</span>
+                    <span class="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded">仕事</span>
+                    <span class="font-medium">企画書の作成</span>
+                  </div>
+                  <p class="text-sm text-gray-500 mb-2">新規プロジェクトの企画書を作成する</p>
+                  <div class="flex items-center gap-4 text-xs text-gray-400">
+                    <span>📅 2025-01-15</span>
+                    <span>🖼️ 画像あり</span>
+                  </div>
+                </div>
+                <div class="wireframe-box rounded px-3 py-1">
+                  <span class="text-gray-500 text-sm">進行中 ▼</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- TODO Item 2 -->
+            <div class="wireframe-box rounded-lg p-4 hover:bg-gray-100 cursor-pointer">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-yellow-100 text-yellow-600 text-xs px-2 py-1 rounded">中</span>
+                    <span class="bg-green-100 text-green-600 text-xs px-2 py-1 rounded">買い物</span>
+                    <span class="font-medium">食材の買い出し</span>
+                  </div>
+                  <p class="text-sm text-gray-500 mb-2">週末の料理用に食材を購入</p>
+                  <div class="flex items-center gap-4 text-xs text-gray-400">
+                    <span>📅 2025-01-13</span>
+                  </div>
+                </div>
+                <div class="wireframe-box rounded px-3 py-1">
+                  <span class="text-gray-500 text-sm">未着手 ▼</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- TODO Item 3 -->
+            <div class="wireframe-box rounded-lg p-4 hover:bg-gray-100 cursor-pointer">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">低</span>
+                    <span class="bg-purple-100 text-purple-600 text-xs px-2 py-1 rounded">勉強</span>
+                    <span class="font-medium">Reactの復習</span>
+                  </div>
+                  <p class="text-sm text-gray-500 mb-2">公式ドキュメントを読み直す</p>
+                  <div class="flex items-center gap-4 text-xs text-gray-400">
+                    <span>📅 2025-01-20</span>
+                  </div>
+                </div>
+                <div class="wireframe-box rounded px-3 py-1">
+                  <span class="text-gray-500 text-sm">未着手 ▼</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State (hidden) -->
+          <div class="hidden text-center py-12">
+            <div class="text-6xl mb-4">📋</div>
+            <p class="text-gray-500 mb-4">TODOがありません</p>
+            <div class="wireframe-box bg-blue-100 border-blue-300 rounded-lg px-4 py-2 inline-block">
+              <span class="text-blue-600">最初のTODOを作成する</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray-100 px-4 py-3 rounded-b-xl">
+          <p class="text-xs text-gray-500 text-center">SCR-004: TODO一覧画面 | /</p>
+        </div>
+      </div>
+
+      <!-- SCR-005: TODO作成画面 -->
+      <div id="todo-create" class="screen screen-container rounded-xl shadow-xl w-full max-w-2xl">
+        <!-- Header -->
+        <div class="bg-gray-800 text-white px-6 py-4 rounded-t-xl flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="cursor-pointer">← 戻る</span>
+            <h1 class="text-xl font-bold">TODO作成</h1>
+          </div>
+        </div>
+
+        <div class="p-6">
+          <div class="space-y-5">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">タイトル <span class="text-red-500">*</span></label>
+              <div class="wireframe-box rounded-lg p-3">
+                <span class="text-gray-400 text-sm">タイトルを入力（最大100文字）</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">詳細・メモ</label>
+              <div class="wireframe-box rounded-lg p-3 h-24">
+                <span class="text-gray-400 text-sm">詳細を入力...</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">期限</label>
+                <div class="wireframe-box rounded-lg p-3">
+                  <span class="text-gray-400 text-sm">📅 日付を選択</span>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">優先度 <span class="text-red-500">*</span></label>
+                <div class="wireframe-box rounded-lg p-3">
+                  <span class="text-gray-500 text-sm">中 ▼</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">カテゴリ <span class="text-red-500">*</span></label>
+              <div class="wireframe-box rounded-lg p-3">
+                <span class="text-gray-500 text-sm">その他 ▼</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">画像（1枚まで）</label>
+              <div class="wireframe-box rounded-lg p-8 text-center border-dashed">
+                <div class="text-4xl mb-2">📷</div>
+                <p class="text-gray-400 text-sm">クリックまたはドラッグ＆ドロップで画像をアップロード</p>
+                <p class="text-gray-400 text-xs mt-1">JPEG, PNG, GIF, WebP（最大5MB）</p>
+              </div>
+            </div>
+
+            <div class="flex gap-3 pt-4">
+              <div class="wireframe-box flex-1 rounded-lg p-3 text-center">
+                <span class="text-gray-500 font-medium">キャンセル</span>
+              </div>
+              <div class="wireframe-box flex-1 bg-blue-100 border-blue-300 rounded-lg p-3 text-center">
+                <span class="text-blue-600 font-medium">保存する</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray-100 px-4 py-3 rounded-b-xl">
+          <p class="text-xs text-gray-500 text-center">SCR-005: TODO作成画面 | /todos/new</p>
+        </div>
+      </div>
+
+      <!-- SCR-006: TODO詳細画面 -->
+      <div id="todo-detail" class="screen screen-container rounded-xl shadow-xl w-full max-w-2xl">
+        <!-- Header -->
+        <div class="bg-gray-800 text-white px-6 py-4 rounded-t-xl flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="cursor-pointer">← 戻る</span>
+            <h1 class="text-xl font-bold">TODO詳細</h1>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="wireframe-box border-gray-500 rounded px-3 py-1 text-sm">
+              <span class="text-gray-300">✏️ 編集</span>
+            </div>
+            <div class="wireframe-box border-red-400 rounded px-3 py-1 text-sm">
+              <span class="text-red-300">🗑️ 削除</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6">
+          <!-- Title & Status -->
+          <div class="flex items-start justify-between mb-6">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="bg-red-100 text-red-600 text-xs px-2 py-1 rounded">高</span>
+                <span class="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded">仕事</span>
+              </div>
+              <h2 class="text-2xl font-bold text-gray-800">企画書の作成</h2>
+            </div>
+            <div class="wireframe-box rounded-lg px-4 py-2">
+              <span class="text-gray-500 font-medium">進行中 ▼</span>
+            </div>
+          </div>
+
+          <!-- Details -->
+          <div class="space-y-4 mb-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-500 mb-1">詳細・メモ</label>
+              <div class="wireframe-box rounded-lg p-4">
+                <p class="text-gray-700">新規プロジェクトの企画書を作成する。<br>・目的と背景<br>・スケジュール案<br>・予算見積もり</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-500 mb-1">期限</label>
+                <div class="wireframe-box rounded-lg p-3">
+                  <span class="text-gray-700">📅 2025-01-15</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-500 mb-1">作成日</label>
+                <div class="wireframe-box rounded-lg p-3">
+                  <span class="text-gray-700">2025-01-10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image -->
+          <div>
+            <label class="block text-sm font-medium text-gray-500 mb-1">添付画像</label>
+            <div class="wireframe-box rounded-lg p-4 text-center">
+              <div class="bg-gray-200 rounded-lg h-48 flex items-center justify-center">
+                <span class="text-gray-400 text-lg">🖼️ 参考資料画像</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray-100 px-4 py-3 rounded-b-xl">
+          <p class="text-xs text-gray-500 text-center">SCR-006: TODO詳細画面 | /todos/:id</p>
+        </div>
+      </div>
+
+      <!-- SCR-007: TODO編集画面 -->
+      <div id="todo-edit" class="screen screen-container rounded-xl shadow-xl w-full max-w-2xl">
+        <!-- Header -->
+        <div class="bg-gray-800 text-white px-6 py-4 rounded-t-xl flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="cursor-pointer">← 戻る</span>
+            <h1 class="text-xl font-bold">TODO編集</h1>
+          </div>
+        </div>
+
+        <div class="p-6">
+          <div class="space-y-5">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">タイトル <span class="text-red-500">*</span></label>
+              <div class="wireframe-box rounded-lg p-3">
+                <span class="text-gray-700">企画書の作成</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">詳細・メモ</label>
+              <div class="wireframe-box rounded-lg p-3 h-24">
+                <span class="text-gray-700">新規プロジェクトの企画書を作成する。</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">期限</label>
+                <div class="wireframe-box rounded-lg p-3">
+                  <span class="text-gray-700">📅 2025-01-15</span>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">優先度 <span class="text-red-500">*</span></label>
+                <div class="wireframe-box rounded-lg p-3">
+                  <span class="text-gray-700">高 ▼</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">カテゴリ <span class="text-red-500">*</span></label>
+              <div class="wireframe-box rounded-lg p-3">
+                <span class="text-gray-700">仕事 ▼</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">ステータス <span class="text-red-500">*</span></label>
+              <div class="wireframe-box rounded-lg p-3">
+                <span class="text-gray-700">進行中 ▼</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">画像</label>
+              <div class="wireframe-box rounded-lg p-4">
+                <div class="flex items-center gap-4">
+                  <div class="bg-gray-200 rounded-lg w-24 h-24 flex items-center justify-center">
+                    <span class="text-gray-400 text-sm">🖼️</span>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-600 mb-2">reference.jpg</p>
+                    <div class="wireframe-box border-red-300 rounded px-3 py-1 inline-block">
+                      <span class="text-red-500 text-sm">画像を削除</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="wireframe-box rounded-lg p-4 mt-2 text-center border-dashed">
+                <span class="text-gray-400 text-sm">別の画像をアップロード</span>
+              </div>
+            </div>
+
+            <div class="flex gap-3 pt-4">
+              <div class="wireframe-box flex-1 rounded-lg p-3 text-center">
+                <span class="text-gray-500 font-medium">キャンセル</span>
+              </div>
+              <div class="wireframe-box flex-1 bg-blue-100 border-blue-300 rounded-lg p-3 text-center">
+                <span class="text-blue-600 font-medium">更新する</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray-100 px-4 py-3 rounded-b-xl">
+          <p class="text-xs text-gray-500 text-center">SCR-007: TODO編集画面 | /todos/:id/edit</p>
+        </div>
+      </div>
+
+      <!-- SCR-008: ゴミ箱画面 -->
+      <div id="trash" class="screen screen-container rounded-xl shadow-xl w-full max-w-2xl">
+        <!-- Header -->
+        <div class="bg-gray-800 text-white px-6 py-4 rounded-t-xl flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="cursor-pointer">← 戻る</span>
+            <h1 class="text-xl font-bold">🗑️ ゴミ箱</h1>
+          </div>
+        </div>
+
+        <div class="p-6">
+          <p class="text-sm text-gray-500 mb-4">削除したTODOは一時的にここに保存されます。復元または完全に削除できます。</p>
+
+          <!-- Trash List -->
+          <div class="space-y-3">
+            <!-- Trash Item 1 -->
+            <div class="wireframe-box rounded-lg p-4">
+              <div class="flex items-center justify-between">
+                <div class="flex-1">
+                  <p class="font-medium text-gray-700">古いタスク1</p>
+                  <p class="text-xs text-gray-400 mt-1">削除日: 2025-01-10</p>
+                </div>
+                <div class="flex gap-2">
+                  <div class="wireframe-box bg-green-50 border-green-300 rounded px-3 py-1">
+                    <span class="text-green-600 text-sm">復元</span>
+                  </div>
+                  <div class="wireframe-box bg-red-50 border-red-300 rounded px-3 py-1">
+                    <span class="text-red-600 text-sm">完全削除</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trash Item 2 -->
+            <div class="wireframe-box rounded-lg p-4">
+              <div class="flex items-center justify-between">
+                <div class="flex-1">
+                  <p class="font-medium text-gray-700">完了済みの作業</p>
+                  <p class="text-xs text-gray-400 mt-1">削除日: 2025-01-08</p>
+                </div>
+                <div class="flex gap-2">
+                  <div class="wireframe-box bg-green-50 border-green-300 rounded px-3 py-1">
+                    <span class="text-green-600 text-sm">復元</span>
+                  </div>
+                  <div class="wireframe-box bg-red-50 border-red-300 rounded px-3 py-1">
+                    <span class="text-red-600 text-sm">完全削除</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div class="hidden text-center py-12">
+            <div class="text-6xl mb-4">🗑️</div>
+            <p class="text-gray-500">ゴミ箱は空です</p>
+          </div>
+        </div>
+
+        <div class="bg-gray-100 px-4 py-3 rounded-b-xl">
+          <p class="text-xs text-gray-500 text-center">SCR-008: ゴミ箱画面 | /trash</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Tab switching logic
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs and screens
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+        // Add active class to clicked tab and corresponding screen
+        tab.classList.add('active');
+        const screenId = tab.dataset.screen;
+        document.getElementById(screenId).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
