@@ -1,13 +1,17 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 
 export const SignupPage = () => {
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [errors, setErrors] = useState({ email: '', password: '', confirmPassword: '' })
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     // エラーをリセット
@@ -34,8 +38,25 @@ export const SignupPage = () => {
       return
     }
 
-    // TODO: Supabase Auth signUp APIの呼び出し
-    console.log('バリデーション成功:', { email, password })
+    setIsLoading(true)
+
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+      })
+
+      if (error) {
+        setErrors((prev) => ({ ...prev, email: error.message }))
+        return
+      }
+
+      navigate('/')
+    } catch (error) {
+      console.error('予期せぬエラー:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -135,9 +156,10 @@ export const SignupPage = () => {
             {/* 登録ボタン */}
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white font-medium py-3 rounded-lg hover:bg-blue-600 transition-colors"
+              disabled={isLoading}
+              className="w-full bg-blue-500 text-white font-medium py-3 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              登録する
+              {isLoading ? '登録中...' : '登録する'}
             </button>
           </form>
 
