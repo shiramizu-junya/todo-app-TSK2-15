@@ -5,11 +5,37 @@ export const SignupPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [errors, setErrors] = useState({ email: '', password: '', confirmPassword: '' })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // ここにサインアップ処理を追加
-    console.log('サインアップ情報:', { email, password, confirmPassword })
+
+    // エラーをリセット
+    const newErrors = { email: '', password: '', confirmPassword: '' }
+
+    // メールアドレスの形式チェック
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = 'メールアドレスの形式が正しくありません'
+    }
+
+    // パスワードの長さチェック
+    if (password.length < 8) {
+      newErrors.password = 'パスワードは8文字以上で入力してください'
+    }
+
+    // パスワード確認チェック
+    if (password !== confirmPassword) {
+      newErrors.confirmPassword = 'パスワードが一致しません'
+    }
+
+    // エラーがあれば設定して処理を止める
+    if (newErrors.email || newErrors.password || newErrors.confirmPassword) {
+      setErrors(newErrors)
+      return
+    }
+
+    // TODO: Supabase Auth signUp APIの呼び出し
+    console.log('バリデーション成功:', { email, password })
   }
 
   return (
@@ -36,11 +62,19 @@ export const SignupPage = () => {
                 type="email"
                 id="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                  setErrors((prev) => ({ ...prev, email: '' }))
+                }}
                 placeholder="example@email.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent ${
+                  errors.email
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 focus:ring-blue-500'
+                }`}
                 required
               />
+              {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
             </div>
 
             {/* パスワード */}
@@ -52,12 +86,20 @@ export const SignupPage = () => {
                 type="password"
                 id="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value)
+                  setErrors((prev) => ({ ...prev, password: '' }))
+                }}
                 placeholder="8文字以上"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent ${
+                  errors.password
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 focus:ring-blue-500'
+                }`}
                 required
                 minLength={8}
               />
+              {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
             </div>
 
             {/* パスワード確認 */}
@@ -72,12 +114,22 @@ export const SignupPage = () => {
                 type="password"
                 id="confirmPassword"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value)
+                  setErrors((prev) => ({ ...prev, confirmPassword: '' }))
+                }}
                 placeholder="パスワードを再入力"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent ${
+                  errors.confirmPassword
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 focus:ring-blue-500'
+                }`}
                 required
                 minLength={8}
               />
+              {errors.confirmPassword && (
+                <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
+              )}
             </div>
 
             {/* 登録ボタン */}
