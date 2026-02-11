@@ -41,6 +41,7 @@ export const LoginPage = () => {
 
       navigate('/')
     } catch (error) {
+      console.error('予期せぬエラー:', error)
     } finally {
       setIsLoading(false)
     }
