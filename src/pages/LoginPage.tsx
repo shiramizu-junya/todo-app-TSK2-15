@@ -1,9 +1,17 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
 export const LoginPage = () => {
   const navigate = useNavigate()
+  const location = useLocation()
+  const message = location.state?.message || ''
+
+  useEffect(() => {
+    if (message) {
+      window.history.replaceState({}, '')
+    }
+  }, [message])
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -59,6 +67,13 @@ export const LoginPage = () => {
             <h1 className="text-2xl font-bold text-gray-800">ログイン</h1>
             <p className="text-gray-500 text-sm mt-1">アカウントにログインしてください</p>
           </div>
+
+          {/* メッセージ */}
+          {message && (
+            <div className="mb-4 p-3 bg-green-50 text-green-600 border border-green-200 rounded-lg text-sm text-center">
+              {message}
+            </div>
+          )}
 
           {/* フォーム */}
           <form onSubmit={handleSubmit} className="space-y-4">
