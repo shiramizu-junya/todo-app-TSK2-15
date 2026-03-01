@@ -6,12 +6,13 @@ export const LoginPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const message = location.state?.message || ''
+  const errorMessage = location.state?.errorMessage || ''
 
   useEffect(() => {
-    if (message) {
+    if (message || errorMessage) {
       window.history.replaceState({}, '')
     }
-  }, [message])
+  }, [message, errorMessage])
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -68,10 +69,17 @@ export const LoginPage = () => {
             <p className="text-gray-500 text-sm mt-1">アカウントにログインしてください</p>
           </div>
 
-          {/* メッセージ */}
+          {/* 成功メッセージ */}
           {message && (
             <div className="mb-4 p-3 bg-green-50 text-green-600 border border-green-200 rounded-lg text-sm text-center">
               {message}
+            </div>
+          )}
+
+          {/* エラーメッセージ */}
+          {errorMessage && (
+            <div className="mb-4 p-3 bg-red-50 text-red-600 border border-red-200 rounded-lg text-sm text-center">
+              {errorMessage}
             </div>
           )}
 
