@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { ROUTES } from '../constants/routes'
 
 export const ResetPasswordPage = () => {
   const [email, setEmail] = useState('')
@@ -61,7 +62,7 @@ export const ResetPasswordPage = () => {
               </div>
 
               <div className="mt-6 text-center">
-                <Link to="/login" className="text-sm text-blue-500 hover:underline">
+                <Link to={ROUTES.LOGIN} className="text-sm text-blue-500 hover:underline">
                   ログイン画面に戻る
                 </Link>
               </div>
@@ -105,7 +106,7 @@ export const ResetPasswordPage = () => {
 
               {/* 戻るリンク */}
               <div className="mt-6 text-center">
-                <Link to="/login" className="text-sm text-blue-500 hover:underline">
+                <Link to={ROUTES.LOGIN} className="text-sm text-blue-500 hover:underline">
                   ログイン画面に戻る
                 </Link>
               </div>

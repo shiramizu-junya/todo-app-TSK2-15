@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Header } from '../components/layout/Header'
 import { supabase } from '../lib/supabase'
+import { ROUTES } from '../constants/routes'
 
 export const TodoListPage = () => {
   const navigate = useNavigate()
@@ -14,7 +15,7 @@ export const TodoListPage = () => {
       return
     }
 
-    navigate('/login', { state: { message: 'ログアウトしました' } })
+    navigate(ROUTES.LOGIN, { state: { message: 'ログアウトしました' } })
   }
 
   return (

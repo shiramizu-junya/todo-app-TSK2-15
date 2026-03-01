@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { ROUTES } from '../constants/routes'
 
 export const SignupPage = () => {
   const navigate = useNavigate()
@@ -51,7 +52,7 @@ export const SignupPage = () => {
         return
       }
 
-      navigate('/')
+      navigate(ROUTES.HOME)
     } catch (error) {
       console.error('予期せぬエラー:', error)
     } finally {
@@ -167,7 +168,7 @@ export const SignupPage = () => {
           <div className="mt-6 text-center">
             <p className="text-sm">
               <span className="text-gray-500">すでにアカウントをお持ちの方は</span>
-              <Link to="/login" className="text-blue-500 hover:underline ml-1">
+              <Link to={ROUTES.LOGIN} className="text-blue-500 hover:underline ml-1">
                 ログイン
               </Link>
             </p>

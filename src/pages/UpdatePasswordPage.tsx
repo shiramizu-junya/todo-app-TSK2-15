@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { ROUTES } from '../constants/routes'
 
 export const UpdatePasswordPage = () => {
   const navigate = useNavigate()
@@ -15,7 +16,7 @@ export const UpdatePasswordPage = () => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
-        navigate('/login', {
+        navigate(ROUTES.LOGIN, {
           state: { errorMessage: '無効なアクセスです。パスワードリセットを再度お試しください。' },
           replace: true,
         })
@@ -56,7 +57,7 @@ export const UpdatePasswordPage = () => {
       }
 
       await supabase.auth.signOut()
-      navigate('/login', { state: { message: 'パスワードを更新しました' } })
+      navigate(ROUTES.LOGIN, { state: { message: 'パスワードを更新しました' } })
     } catch (err) {
       console.error('予期せぬエラー:', err)
     } finally {

@@ -10,6 +10,7 @@ import { TodoEditPage } from "./pages/TodoEditPage"
 import { TrashPage } from "./pages/TrashPage"
 import { UpdatePasswordPage } from "./pages/UpdatePasswordPage"
 import { supabase } from "./lib/supabase"
+import { ROUTES } from "./constants/routes"
 
 function App() {
   const navigate = useNavigate()
@@ -23,7 +24,7 @@ function App() {
       const message = errorDescription === 'Email link is invalid or has expired'
         ? 'メールリンクが無効または有効期限切れです。再度お試しください。'
         : 'エラーが発生しました。再度お試しください。'
-      navigate('/login', { state: { errorMessage: message }, replace: true })
+      navigate(ROUTES.LOGIN, { state: { errorMessage: message }, replace: true })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -31,7 +32,7 @@ function App() {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') {
-        navigate('/update-password')
+        navigate(ROUTES.UPDATE_PASSWORD)
       }
     })
 
@@ -43,17 +44,17 @@ function App() {
   return (
     <Routes>
       {/* 認証不要 */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
-      <Route path="/reset-password" element={<ResetPasswordPage />} />
-      <Route path="/update-password" element={<UpdatePasswordPage />} />
+      <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+      <Route path={ROUTES.SIGNUP} element={<SignupPage />} />
+      <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
+      <Route path={ROUTES.UPDATE_PASSWORD} element={<UpdatePasswordPage />} />
 
       {/* 認証必要 */}
-      <Route path="/" element={<TodoListPage />} />
-      <Route path="/todos/new" element={<TodoCreatePage />} />
-      <Route path="/todos/:id" element={<TodoDetailPage />} />
-      <Route path="/todos/:id/edit" element={<TodoEditPage />} />
-      <Route path="/trash" element={<TrashPage />} />
+      <Route path={ROUTES.HOME} element={<TodoListPage />} />
+      <Route path={ROUTES.TODO_NEW} element={<TodoCreatePage />} />
+      <Route path={ROUTES.TODO_DETAIL} element={<TodoDetailPage />} />
+      <Route path={ROUTES.TODO_EDIT} element={<TodoEditPage />} />
+      <Route path={ROUTES.TRASH} element={<TrashPage />} />
     </Routes>
   )
 }
