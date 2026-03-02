@@ -5,6 +5,7 @@ import { TodoItem } from '../components/todo/TodoItem'
 import { ROUTES } from '../constants/routes'
 import { STATUS_OPTIONS } from '../constants/todo'
 import { useAuth } from '../contexts/AuthContext'
+import { useDebounce } from '../hooks/useDebounce'
 import type { Status, Todo } from '../lib/database.types'
 import { supabase } from '../lib/supabase'
 
@@ -15,6 +16,7 @@ export const TodoListPage = () => {
   const [todos, setTodos] = useState<Todo[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
+  const debouncedQuery = useDebounce(searchQuery, 300)
   const [statusFilter, setStatusFilter] = useState<Status | 'all'>('all')
 
   useEffect(() => {
@@ -51,14 +53,14 @@ export const TodoListPage = () => {
   }, [user, statusFilter])
 
   const filteredTodos = useMemo(() => {
-    if (!searchQuery) return todos
-    const q = searchQuery.toLowerCase()
+    if (!debouncedQuery) return todos
+    const q = debouncedQuery.toLowerCase()
     return todos.filter(
       (todo) =>
         todo.title.toLowerCase().includes(q) ||
         (todo.description && todo.description.toLowerCase().includes(q)),
     )
-  }, [todos, searchQuery])
+  }, [todos, debouncedQuery])
 
   const handleStatusChange = async (todoId: string, status: Status) => {
     const { error } = await supabase.from('todos').update({ status }).eq('id', todoId)
