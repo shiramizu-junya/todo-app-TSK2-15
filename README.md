@@ -1,73 +1,68 @@
-# React + TypeScript + Vite
+# TODO App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+個人のタスク管理を効率化するための Web アプリケーション（MVP）。
 
-Currently, two official plugins are available:
+## 技術スタック
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| カテゴリ | 技術 |
+|----------|------|
+| フロントエンド | React + TypeScript + Vite |
+| スタイリング | TailwindCSS |
+| バックエンド | Supabase（認証・データベース・Storage） |
+| ホスティング | Vercel |
 
-## React Compiler
+## 主な機能
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **認証**: メール/パスワードによるユーザー登録・ログイン・パスワードリセット
+- **TODO管理**: 作成・一覧表示・詳細表示・編集・削除（論理削除）
+- **ステータス管理**: 未着手 / 進行中 / 完了
+- **分類**: 優先度（高・中・低）、カテゴリ（仕事・プライベート・買い物・勉強・その他）
+- **画像添付**: TODO に画像をアップロード・プレビュー・削除
+- **検索・フィルタ**: キーワード検索、ステータスフィルタリング（デバウンス対応）
+- **ゴミ箱**: 削除した TODO の復元・完全削除（Storage 画像も連動削除）
 
-## Expanding the ESLint configuration
+## セットアップ
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 前提条件
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js
+- [Supabase CLI](https://supabase.com/docs/guides/cli)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 環境変数
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+`.env` ファイルをプロジェクトルートに作成してください。
+
+```
+VITE_SUPABASE_URL=<Supabase URL>
+VITE_SUPABASE_ANON_KEY=<Supabase Anon Key>
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### ローカル開発
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+# 依存パッケージのインストール
+npm install
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Supabase ローカル環境の起動
+npx supabase start
+
+# 開発サーバーの起動
+npm run dev
 ```
+
+### その他コマンド
+
+```bash
+npm run build        # プロダクションビルド
+npm run lint         # ESLint チェック
+npm run lint:fix     # ESLint 自動修正
+npm run format       # Prettier フォーマット
+```
+
+## ドキュメント
+
+- [要件定義書](doc/requirements.md)
+- [画面設計書](doc/screen-design.md)
+- [データベース設計書](doc/database-design.md)
+- [ディレクトリ構成](doc/directory-structure.md)
+- [ワイヤーフレーム](doc/wireframes.html)
