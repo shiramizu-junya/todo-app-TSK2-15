@@ -4,6 +4,7 @@ import { TrashItem } from '../components/todo/TrashItem'
 import { ROUTES } from '../constants/routes'
 import { useAuth } from '../contexts/AuthContext'
 import type { Todo } from '../lib/database.types'
+import { deleteAllTodoImages } from '../lib/storage'
 import { supabase } from '../lib/supabase'
 
 export const TrashPage = () => {
@@ -51,7 +52,13 @@ export const TrashPage = () => {
   }
 
   const handlePermanentDelete = async () => {
-    if (!deleteTargetId) return
+    if (!deleteTargetId || !user) return
+
+    // Delete associated images from Storage
+    const targetTodo = todos.find((todo) => todo.id === deleteTargetId)
+    if (targetTodo?.image_url) {
+      await deleteAllTodoImages(user.id, deleteTargetId)
+    }
 
     const { error } = await supabase.from('todos').delete().eq('id', deleteTargetId)
 

@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../constants/routes'
-import { CATEGORY_OPTIONS, PRIORITY_OPTIONS } from '../constants/todo'
+import { CATEGORY_OPTIONS, IMAGE_ACCEPT, PRIORITY_OPTIONS } from '../constants/todo'
 import { useAuth } from '../contexts/AuthContext'
 import type { Category, Priority } from '../lib/database.types'
+import { uploadTodoImage, validateImageFile } from '../lib/storage'
 import { supabase } from '../lib/supabase'
 
 export const TodoCreatePage = () => {
@@ -15,13 +16,41 @@ export const TodoCreatePage = () => {
   const [dueDate, setDueDate] = useState('')
   const [priority, setPriority] = useState<Priority>('medium')
   const [category, setCategory] = useState<Category>('other')
-  const [errors, setErrors] = useState({ title: '', form: '' })
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [errors, setErrors] = useState({ title: '', form: '', image: '' })
   const [isLoading, setIsLoading] = useState(false)
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const validationError = validateImageFile(file)
+    if (validationError) {
+      setErrors((prev) => ({ ...prev, image: validationError }))
+      return
+    }
+
+    setErrors((prev) => ({ ...prev, image: '' }))
+    setImageFile(file)
+
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      setImagePreview(ev.target?.result as string)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const handleImageRemove = () => {
+    setImageFile(null)
+    setImagePreview(null)
+    setErrors((prev) => ({ ...prev, image: '' }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const newErrors = { title: '', form: '' }
+    const newErrors = { title: '', form: '', image: '' }
 
     if (!title.trim()) {
       newErrors.title = 'タイトルを入力してください'
@@ -35,31 +64,44 @@ export const TodoCreatePage = () => {
     }
 
     if (!user) {
-      setErrors({ title: '', form: '認証エラーが発生しました。再度ログインしてください。' })
+      setErrors({ title: '', form: '認証エラーが発生しました。再度ログインしてください。', image: '' })
       return
     }
 
     setIsLoading(true)
 
     try {
-      const { error } = await supabase.from('todos').insert({
-        user_id: user.id,
-        title: title.trim(),
-        description: description.trim() || null,
-        due_date: dueDate || null,
-        priority,
-        category,
-      })
+      const { data, error } = await supabase
+        .from('todos')
+        .insert({
+          user_id: user.id,
+          title: title.trim(),
+          description: description.trim() || null,
+          due_date: dueDate || null,
+          priority,
+          category,
+        })
+        .select('id')
+        .single()
 
-      if (error) {
-        setErrors({ title: '', form: error.message })
+      if (error || !data) {
+        setErrors({ title: '', form: error?.message ?? 'TODOの作成に失敗しました', image: '' })
         return
+      }
+
+      if (imageFile) {
+        const result = await uploadTodoImage(imageFile, user.id, data.id)
+        if ('error' in result) {
+          setErrors({ title: '', form: `画像のアップロードに失敗しました: ${result.error}`, image: '' })
+          return
+        }
+        await supabase.from('todos').update({ image_url: result.url }).eq('id', data.id)
       }
 
       navigate(ROUTES.HOME)
     } catch (error) {
       console.error('予期せぬエラー:', error)
-      setErrors({ title: '', form: '予期せぬエラーが発生しました' })
+      setErrors({ title: '', form: '予期せぬエラーが発生しました', image: '' })
     } finally {
       setIsLoading(false)
     }
@@ -175,6 +217,35 @@ export const TodoCreatePage = () => {
                   </option>
                 ))}
               </select>
+            </div>
+
+            {/* 画像アップロード */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">添付画像</label>
+              {imagePreview ? (
+                <div>
+                  <img
+                    src={imagePreview}
+                    alt="プレビュー"
+                    className="max-w-full rounded-lg border border-gray-200"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleImageRemove}
+                    className="mt-2 text-sm text-red-500 hover:text-red-700 transition-colors"
+                  >
+                    画像を削除
+                  </button>
+                </div>
+              ) : (
+                <input
+                  type="file"
+                  accept={IMAGE_ACCEPT}
+                  onChange={handleImageChange}
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+              )}
+              {errors.image && <p className="mt-1 text-sm text-red-500">{errors.image}</p>}
             </div>
 
             {/* ボタン */}

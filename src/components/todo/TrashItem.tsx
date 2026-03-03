@@ -14,7 +14,14 @@ export const TrashItem = ({ todo, onRestore, onDelete }: Props) => {
           <h3 className="text-base font-semibold text-gray-800 truncate">{todo.title}</h3>
           {todo.deleted_at && (
             <p className="text-xs text-gray-400 mt-1">
-              削除日: {new Date(todo.deleted_at).toLocaleDateString('ja-JP')}
+              削除日:{' '}
+              {new Date(todo.deleted_at).toLocaleString('ja-JP', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
             </p>
           )}
         </div>
