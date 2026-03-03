@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ROUTES } from '../constants/routes'
-import { CATEGORY_OPTIONS, PRIORITY_OPTIONS, STATUS_LABELS } from '../constants/todo'
+import { CATEGORY_OPTIONS, IMAGE_ACCEPT, PRIORITY_OPTIONS, STATUS_LABELS } from '../constants/todo'
 import { useAuth } from '../contexts/AuthContext'
 import type { Category, Priority, Status } from '../lib/database.types'
+import { deleteTodoImage, uploadTodoImage, validateImageFile } from '../lib/storage'
 import { supabase } from '../lib/supabase'
 
 export const TodoEditPage = () => {
@@ -20,7 +21,10 @@ export const TodoEditPage = () => {
   const [category, setCategory] = useState<Category>('other')
   const [status, setStatus] = useState<Status>('not_started')
   const [imageUrl, setImageUrl] = useState<string | null>(null)
-  const [errors, setErrors] = useState({ title: '', form: '' })
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null)
+  const [errors, setErrors] = useState({ title: '', form: '', image: '' })
 
   useEffect(() => {
     const fetchTodo = async () => {
@@ -50,16 +54,44 @@ export const TodoEditPage = () => {
       setCategory(data.category)
       setStatus(data.status)
       setImageUrl(data.image_url)
+      setOriginalImageUrl(data.image_url)
       setIsLoading(false)
     }
 
     fetchTodo()
   }, [id, user, navigate])
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const validationError = validateImageFile(file)
+    if (validationError) {
+      setErrors((prev) => ({ ...prev, image: validationError }))
+      return
+    }
+
+    setErrors((prev) => ({ ...prev, image: '' }))
+    setImageFile(file)
+
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      setImagePreview(ev.target?.result as string)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const handleImageRemove = () => {
+    setImageUrl(null)
+    setImageFile(null)
+    setImagePreview(null)
+    setErrors((prev) => ({ ...prev, image: '' }))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const newErrors = { title: '', form: '' }
+    const newErrors = { title: '', form: '', image: '' }
 
     if (!title.trim()) {
       newErrors.title = 'タイトルを入力してください'
@@ -72,9 +104,37 @@ export const TodoEditPage = () => {
       return
     }
 
+    if (!user) {
+      setErrors({
+        title: '',
+        form: '認証エラーが発生しました。再度ログインしてください。',
+        image: '',
+      })
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
+      // Delete old image from Storage if it was removed or replaced
+      if (originalImageUrl && originalImageUrl !== imageUrl && !imageFile) {
+        await deleteTodoImage(originalImageUrl)
+      }
+      if (originalImageUrl && imageFile) {
+        await deleteTodoImage(originalImageUrl)
+      }
+
+      // Upload new image if selected
+      let finalImageUrl = imageUrl
+      if (imageFile) {
+        const result = await uploadTodoImage(imageFile, user.id, id!)
+        if ('error' in result) {
+          setErrors({ title: '', form: `画像のアップロードに失敗しました: ${result.error}`, image: '' })
+          return
+        }
+        finalImageUrl = result.url
+      }
+
       const { error } = await supabase
         .from('todos')
         .update({
@@ -84,19 +144,19 @@ export const TodoEditPage = () => {
           priority,
           category,
           status,
-          image_url: imageUrl,
+          image_url: finalImageUrl,
         })
         .eq('id', id!)
 
       if (error) {
-        setErrors({ title: '', form: error.message })
+        setErrors({ title: '', form: error.message, image: '' })
         return
       }
 
       navigate(`/todos/${id}`)
     } catch (error) {
       console.error('予期せぬエラー:', error)
-      setErrors({ title: '', form: '予期せぬエラーが発生しました' })
+      setErrors({ title: '', form: '予期せぬエラーが発生しました', image: '' })
     } finally {
       setIsSubmitting(false)
     }
@@ -241,26 +301,34 @@ export const TodoEditPage = () => {
               </select>
             </div>
 
-            {/* 画像プレビュー */}
-            {imageUrl && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">添付画像</label>
-                <div className="relative">
+            {/* 画像アップロード */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">添付画像</label>
+              {imageUrl || imagePreview ? (
+                <div>
                   <img
-                    src={imageUrl}
+                    src={imagePreview ?? imageUrl!}
                     alt="添付画像"
                     className="max-w-full rounded-lg border border-gray-200"
                   />
                   <button
                     type="button"
-                    onClick={() => setImageUrl(null)}
+                    onClick={handleImageRemove}
                     className="mt-2 text-sm text-red-500 hover:text-red-700 transition-colors"
                   >
                     画像を削除
                   </button>
                 </div>
-              </div>
-            )}
+              ) : (
+                <input
+                  type="file"
+                  accept={IMAGE_ACCEPT}
+                  onChange={handleImageChange}
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+              )}
+              {errors.image && <p className="mt-1 text-sm text-red-500">{errors.image}</p>}
+            </div>
 
             {/* ボタン */}
             <div className="flex gap-3 pt-2">

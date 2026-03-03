@@ -60,3 +60,5 @@ export const STATUS_COLORS: Record<Status, string> = {
   in_progress: 'bg-blue-100 text-blue-600',
   completed: 'bg-green-100 text-green-600',
 }
+
+export const IMAGE_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp'
